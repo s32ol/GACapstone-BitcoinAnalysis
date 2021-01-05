@@ -12,13 +12,27 @@ class df_calculations:
         Constuctor
         Parameters:
             data (pandas.DataFrame): intakes a df
-            day (datetime.timedelta): class instance variable
         '''
         self.data = data 
         
+    @staticmethod
+    def days_to_window_intervals(time_range):
+        '''
+        static method that converts days(int) into min intervals
+        Parameters
+        ----------
+        time_range : int
+            number that gets converted (in days)
+        Returns
+        -------
+        TYPE : int
+            day to mintute conversion
+        '''
+        return int(dt.timedelta(days=time_range).total_seconds()/60)
+            
     def moving_avg(self, typical_price, time_range):
         '''
-        The method calucates the moving average from market data, given that
+        This method calucates the moving average from market data, given that
         a df containing typical price/time is given. *Note time in unix time 
         Parameters
         ----------
@@ -33,7 +47,7 @@ class df_calculations:
         ma : df
             this method will produce an moving average df
         '''
-        days = int(dt.timedelta(days=time_range).total_seconds()/60)
+        days = self.days_to_window_intervals(time_range)
         ma = pd.DataFrame()
         ma['moving_avg'] = typical_price['typical_price'].rolling(days).mean()
         return ma
@@ -56,9 +70,9 @@ class df_calculations:
         tp = pd.DataFrame()
         tp['typical_price'] = round((high + low + close) /3, 4) 
         return tp
-        
-btc_data = pd.read_csv('./raw_data/coinbaseUSD2014_2018.csv')
-btc_trades = df_calculations(btc_data)
-btc_tp = btc_trades.typical_price('High', 'Low', 'Close')
-btc_ma = btc_trades.moving_avg(btc_tp, 1)
 
+#test_methods
+#btc_data = pd.read_csv('./raw_data/coinbaseUSD2014_2018.csv')
+#btc_trades = df_calculations(btc_data)
+#btc_tp = btc_trades.typical_price('High', 'Low', 'Close')
+#btc_ma = btc_trades.moving_avg(btc_tp, 10)

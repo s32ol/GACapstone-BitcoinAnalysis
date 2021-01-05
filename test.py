@@ -56,13 +56,12 @@ class df_calculations:
         tp = pd.DataFrame()
         tp['typical_price'] = round((high + low + close) /3, 4) 
         return tp
-        
 
-btc_data = pd.read_csv('./raw_data/toy_set.csv')        
-btc_trades = df_calculations(btc_data)
-btc_tp = btc_trades.typical_price('High', 'Low', 'Close')
-btc_ma = btc_trades.moving_avg(btc_tp, 1)
-print(btc_ma)
+#test_methods
+#btc_data = pd.read_csv('./raw_data/coinbaseUSD2014_2018.csv')  
+#btc_trades = df_calculations(btc_data)
+#btc_tp = btc_trades.typical_price('High', 'Low', 'Close')
+#btc_ma = btc_trades.moving_avg(btc_tp, 1)
 
 
 
