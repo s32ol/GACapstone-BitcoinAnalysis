@@ -2,6 +2,7 @@
 import pandas as pd
 import time as t
 import datetime as dt
+import matplotlib.pyplot as plt
 from technical_analytics import technical_analytics_df as taf
 
 #overall goal
@@ -19,7 +20,7 @@ def date_bins_df(df, dates):
     ----------
     df : pandas.dataframe
         DESCRIPTION.
-    dates : [str, str] "yyyy/m/d" <- Format
+    dates : [str, str] "d/m/yyyy" <- Format
         Date ranges for df creation
     Returns
     -------
@@ -72,22 +73,29 @@ def date_bins_df(df, dates):
     
     export_df = timeframe_df.copy() #avoid chain indexing
     export_df['Date'] = pd.to_datetime(timeframe_df['Timestamp'], unit='s')
-    export_df = export_df.drop(columns=['Timestamp']) 
+    export_df = export_df.drop(columns=['Timestamp'])
     
-        
     return export_df
-
  
 btc_data = pd.read_csv('./raw_data/coinbaseUSD2014_2018.csv')
 btc_trades = taf(btc_data).bollinger_bands(10, 2)
 
-
 btc_bb = pd.DataFrame()
 btc_bb = pd.concat([btc_data['Timestamp'], btc_trades['moving_avg'], btc_trades['upper_band'], btc_trades['lower_band'], btc_data['Close']], axis=1)
 
-x = date_bins_df(btc_bb, ["01/01/2016", "02/01/2016"])
+btc_range = date_bins_df(btc_bb, ["01/01/2016", "31/01/2016"])
+#btc_range = btc_range.drop(columns=['Date'])
 
-x.plot()
+plt.style.use('fivethirtyeight')
+fig = plt.figure(figsize=(12,6))
+ax = fig.add_subplot(111)
+
+x_axis = btc_range['Date']
+ax.plot(x_axis, btc_range['Close'], color='blue', lw=2)
+ax.plot(x_axis, btc_range['moving_avg'], color='black', lw=2)
+
+plt.show();
+
 
 
 
