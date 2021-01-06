@@ -28,7 +28,7 @@ class technical_analytics(DFC):
         time_range : int
             number that gets converted (in days)
             default value: 10
-        stdev : int
+        stdev : int     
             standard deveations from the typical price
             default value: 2
         Returns
@@ -43,10 +43,10 @@ class technical_analytics(DFC):
         std = pd.DataFrame() #Standard Deviation calculator
         std['rSTDEV'] = (tp['typical_price'].rolling(days).std()) * stdev
         
-        upper_band = pd.DataFrame()
+        upper_band = pd.DataFrame()     #BOLU=MA(TP,n)+m∗σ[TP,n]
         upper_band['upper_band'] = round(ma['moving_avg'] + std['rSTDEV'], 4)
         
-        lower_band = pd.DataFrame()
+        lower_band = pd.DataFrame()     #BOLD=MA(TP,n)−m∗σ[TP,n]
         lower_band['lower_band'] = round(ma['moving_avg'] - std['rSTDEV'],4)
         
         return pd.concat([upper_band, lower_band], axis=1)
